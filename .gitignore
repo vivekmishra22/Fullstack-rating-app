@@ -1,0 +1,66 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+#inside root 
+node_modules
+.env
+
+### Node.js (Backend) ###
+# Environment variables
+backend/.env
+backend/.env.*
+
+# Dependencies
+backend/node_modules/
+backend/.pnp
+.pnp.js
+
+# Logs
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+
+# Production
+backend/build/
+backend/coverage/
+
+### React (Frontend) ###
+# Environment variables
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Dependencies
+frontend/node_modules/
+frontend/.pnp
+frontend/.pnp.js
+
+# Build
+frontend/build/
+frontend/.next/
+
+# Logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+### IDE ###
+.idea/
+.vscode/
+*.swp
+*.swo
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Test ###
+*/coverage/
+*.lcov
+
+### Misc ###
+*.log
+*.tmp
+*.pid
+*.seed
