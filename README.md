@@ -1,4 +1,4 @@
-# Store Rating Application
+# Fullstack-rating-app
 
 A full-stack web application for rating stores with role-based access control.
 
