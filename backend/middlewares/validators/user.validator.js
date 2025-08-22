@@ -3,7 +3,7 @@ const { body } = require('express-validator');
 const validateCreateAdmin = [
   body('name')
     .trim()
-    .isLength({ min: 20, max: 60 })
+    .isLength({ min: 8, max: 60 })
     .withMessage('Name must be between 20 and 60 characters'),
   body('email')
     .isEmail()
@@ -24,8 +24,8 @@ const validateCreateAdmin = [
 const validateCreateStoreOwner = [
   body('name')
     .trim()
-    .isLength({ min: 20, max: 60 })
-    .withMessage('Name must be between 20 and 60 characters'),
+    .isLength({ min: 8, max: 60 })
+    .withMessage('Name must be between 8 and 60 characters'),
   body('email')
     .isEmail()
     .withMessage('Please enter a valid email'),
