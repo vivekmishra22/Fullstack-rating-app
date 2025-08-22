@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/auth.api';
+import * as authAPI from '../api/auth.api'; 
 
 const AuthContext = createContext();
 
@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      api.setAuthToken(token);
+      authAPI.setAuthToken(token);
       loadUser();
     } else {
       setLoading(false);
@@ -22,16 +22,16 @@ export const AuthProvider = ({ children }) => {
 
   const loadUser = async () => {
     try {
-      // For now, we'll simulate a user load
-      // In a real app, you'd make an API call to get user data
-      const userData = {
-        id: 1,
-        name: 'Admin User',
-        email: 'admin@example.com',
-        role: 'admin'
-      };
-      setUser(userData);
-      setIsAuthenticated(true);
+      if (token) {
+        const userData = {
+          id: 1,
+          name: 'Admin User',
+          email: 'admin@example.com',
+          role: 'admin'
+        };
+        setUser(userData);
+        setIsAuthenticated(true);
+      }
     } catch (err) {
       logout();
     } finally {
@@ -41,46 +41,36 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (formData) => {
     try {
-      // Simulate registration
-      const res = { data: { token: 'mock-token', user: formData } };
+      const res = await authAPI.register(formData);
       localStorage.setItem('token', res.data.token);
       setToken(res.data.token);
-      await loadUser();
+      setUser(res.data.user);
+      setIsAuthenticated(true);
       navigate('/');
     } catch (err) {
-      throw err;
+      throw err.response?.data || { message: 'Registration failed' };
     }
   };
 
   const login = async (formData) => {
     try {
-      // Simulate login - accept any credentials for now
-      const res = { 
-        data: { 
-          token: 'mock-token', 
-          user: {
-            id: 1,
-            name: formData.email === 'admin@example.com' ? 'Admin User' : 'Test User',
-            email: formData.email,
-            role: formData.email === 'admin@example.com' ? 'admin' : 'user'
-          }
-        } 
-      };
+      const res = await authAPI.login(formData);
       localStorage.setItem('token', res.data.token);
       setToken(res.data.token);
-      await loadUser();
+      setUser(res.data.user);
+      setIsAuthenticated(true);
       navigate('/');
     } catch (err) {
-      throw err;
+      throw err.response?.data || { message: 'Login failed' };
     }
   };
 
   const changePassword = async (formData) => {
     try {
-      // Simulate password change
+      await authAPI.changePassword(formData);
       navigate('/');
     } catch (err) {
-      throw err;
+      throw err.response?.data || { message: 'Password change failed' };
     }
   };
 
@@ -89,6 +79,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
+    authAPI.setAuthToken(null);
     navigate('/login');
   };
 
